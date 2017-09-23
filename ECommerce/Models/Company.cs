@@ -27,8 +27,6 @@ namespace ECommerce.Models
         [MaxLength(100, ErrorMessage ="The field {0} must be maximun {1} characters length")]
         public string Address { get; set; }
 
-        [Required(ErrorMessage ="The field {0} is required")]
-        [MaxLength(20, ErrorMessage = "The field {0} must maximun {1} characters length")]
         [DataType(DataType.ImageUrl)]
         public string Logo { get; set; }
 

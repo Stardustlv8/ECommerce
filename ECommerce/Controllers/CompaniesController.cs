@@ -62,17 +62,22 @@ namespace ECommerce.Controllers
         {
             if (ModelState.IsValid)
             {
-                var pic = string.Empty;
-                var folder = "~/Content/Logos";
+                db.Companies.Add(company);
+                db.SaveChanges();
 
                 if (company.LogoFile != null)
                 {
-                    pic = FilesHelper.UploadPhoto(company.LogoFile, folder);
-                    pic = string.Format("{0}/{1}", folder, pic);
+                    var folder = "~/Content/Logos";
+                    var file = string.Format("{0}.jpg", company.CompanyId);
+                    var response = FilesHelper.UploadPhoto(company.LogoFile, folder, file);
+                    if (response)
+                    {
+                        var pic = string.Format("{0}/{1}", folder, file);
+                        company.Logo = pic;
+                        db.Entry(company).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
-                company.Logo = pic;
-                db.Companies.Add(company);
-                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
@@ -127,6 +132,20 @@ namespace ECommerce.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                if (company.LogoFile != null)
+                {
+                    var folder = "~/Content/Logos";
+                    var file = string.Format("{0}.jpg", company.CompanyId);
+                    var response = FilesHelper.UploadPhoto(company.LogoFile, folder, file);
+
+                    if (response)
+                    {
+                        var pic = string.Format("{0}/{1}", folder, file);
+                        company.Logo = pic;
+                    }
+                }
+
                 db.Entry(company).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
