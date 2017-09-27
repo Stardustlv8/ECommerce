@@ -262,3 +262,8 @@ paket-files/
 __pycache__/
 *.pyc
 Web.config
+/ECommerce/Content/Users
+/docker-compose.ci.build.yml
+/docker-compose.yml
+/docker-compose.override.yml
+/docker-compose.dcproj

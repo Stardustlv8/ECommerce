@@ -41,15 +41,15 @@ namespace ECommerce.Controllers
         public ActionResult Create()
         {
             ViewBag.CityId = new SelectList(
-                CombosHelper.GetCities(), 
+                CombosHelper.GetCities(),
                 "CityId", "Name");
 
             ViewBag.CompanyId = new SelectList(
-                CombosHelper.GetCompanies(), 
+                CombosHelper.GetCompanies(),
                 "CompanyId", "Name");
 
             ViewBag.DepartmentId = new SelectList(
-                CombosHelper.GetDepartments(), 
+                CombosHelper.GetDepartments(),
                 "DepartmentId", "Name");
 
             return View();
@@ -66,8 +66,9 @@ namespace ECommerce.Controllers
             {
                 db.Users.Add(user);
                 db.SaveChanges();
+                UsersHelper.CreateUserASP(user.UserName, "User");
 
-                if (user.PhotoFile!=null)
+                if (user.PhotoFile != null)
                 {
                     var folder = "~/Content/Users";
                     var file = string.Format($"{user.UserId}.jpg");
@@ -85,18 +86,18 @@ namespace ECommerce.Controllers
             }
 
             ViewBag.CityId = new SelectList(
-                CombosHelper.GetCities(), 
-                "CityId", "Name", 
+                CombosHelper.GetCities(),
+                "CityId", "Name",
                 user.CityId);
 
             ViewBag.CompanyId = new SelectList(
-                CombosHelper.GetCompanies(), 
-                "CompanyId", "Name", 
+                CombosHelper.GetCompanies(),
+                "CompanyId", "Name",
                 user.CompanyId);
 
             ViewBag.DepartmentId = new SelectList(
-                CombosHelper.GetDepartments(), 
-                "DepartmentId", "Name", 
+                CombosHelper.GetDepartments(),
+                "DepartmentId", "Name",
                 user.DepartmentId);
 
             return View(user);
@@ -115,18 +116,18 @@ namespace ECommerce.Controllers
                 return HttpNotFound();
             }
             ViewBag.CityId = new SelectList(
-                CombosHelper.GetCities(), 
-                "CityId", "Name", 
+                CombosHelper.GetCities(),
+                "CityId", "Name",
                 user.CityId);
 
             ViewBag.CompanyId = new SelectList(
-                CombosHelper.GetCompanies(), 
-                "CompanyId", "Name", 
+                CombosHelper.GetCompanies(),
+                "CompanyId", "Name",
                 user.CompanyId);
 
             ViewBag.DepartmentId = new SelectList(
-                CombosHelper.GetDepartments(), 
-                "DepartmentId", "Name", 
+                CombosHelper.GetDepartments(),
+                "DepartmentId", "Name",
                 user.DepartmentId);
 
             return View(user);
@@ -159,18 +160,18 @@ namespace ECommerce.Controllers
             }
 
             ViewBag.CityId = new SelectList(
-                CombosHelper.GetCities(), 
-                "CityId", "Name", 
+                CombosHelper.GetCities(),
+                "CityId", "Name",
                 user.CityId);
 
             ViewBag.CompanyId = new SelectList(
-                CombosHelper.GetCompanies(), 
-                "CompanyId", "Name", 
+                CombosHelper.GetCompanies(),
+                "CompanyId", "Name",
                 user.CompanyId);
 
             ViewBag.DepartmentId = new SelectList(
-                CombosHelper.GetDepartments(), 
-                "DepartmentId", "Name", 
+                CombosHelper.GetDepartments(),
+                "DepartmentId", "Name",
                 user.DepartmentId);
 
             return View(user);
