@@ -15,6 +15,43 @@ namespace ECommerce.Classes
         private static ApplicationDbContext userContext = new ApplicationDbContext();
         private static ECommerceContext db = new ECommerceContext();
 
+        public static bool DeleteUser(string userName)
+        {
+            var userManager = new UserManager<ApplicationUser>(
+                new UserStore<ApplicationUser>(userContext));
+            var userASP = userManager.FindByEmail(userName);
+
+            if (userASP == null)
+            {
+                return false;
+            }
+
+            var response = userManager.Delete(userASP);
+            return response.Succeeded;
+
+        }
+
+        public static bool UpdateUserName(string currentUserName, string newUserName)
+        {
+            var userManager = new UserManager<ApplicationUser>(
+                new UserStore<ApplicationUser>(userContext));
+
+            var userASP = userManager.FindByEmail(currentUserName);
+
+            if (userASP ==null)
+            {
+                return false;
+            }
+
+            userASP.UserName = newUserName;
+            userASP.Email = newUserName;
+            var response = userManager.Update(userASP);
+
+            return response.Succeeded;
+
+        }
+
+
         public static void CheckRole(string roleName)
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(userContext));
@@ -77,35 +114,35 @@ namespace ECommerce.Classes
             userManager.AddToRole(userASP.Id, roleName);
 
         }
-        public static async Task PasswordRecovery(string email)
-        {
-            var userManager = new UserManager<ApplicationUser>(
-                new UserStore<ApplicationUser>(userContext));
+        //public static async Task PasswordRecovery(string email)
+        //{
+        //    var userManager = new UserManager<ApplicationUser>(
+        //        new UserStore<ApplicationUser>(userContext));
 
-            var userASP = userManager.FindByEmail(email);
+        //    var userASP = userManager.FindByEmail(email);
 
-            if (userASP==null)
-            {
-                return;
-            }
+        //    if (userASP==null)
+        //    {
+        //        return;
+        //    }
 
-            var user = db.Users.Where(tp => tp.UserName == email)
-                .FirstOrDefault();
+        //    var user = db.Users.Where(tp => tp.UserName == email)
+        //        .FirstOrDefault();
 
-            if (user==null)
-            {
-                return;
-            }
+        //    if (user==null)
+        //    {
+        //        return;
+        //    }
 
-            var random = new Random();
+        //    var random = new Random();
 
-            var newPassWord = string.Format("{0}{1}{2:04}*",
-                user.FirstName.Trim().ToUpper().Substring(0,1),
-                user.LastName.Trim().ToLower(),
-                random.Next(10000));
+        //    var newPassWord = string.Format("{0}{1}{2:04}*",
+        //        user.FirstName.Trim().ToUpper().Substring(0,1),
+        //        user.LastName.Trim().ToLower(),
+        //        random.Next(10000));
 
 
-        }
+        //}
 
         public void Dispose()
         {
