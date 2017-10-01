@@ -48,28 +48,28 @@ namespace ECommerce.Classes
             return companies.OrderBy(d => d.Name).ToList();
         }
 
-        public static List<Company> GetTaxes(int companyId)
+        public static List<Tax> GetTaxes(int companyId)
         {
-            var companies = db.Companies.ToList();
-            companies.Add(new Company
+            var taxes = db.Taxes.ToList();
+            taxes.Add(new Tax
             {
-                CityId = 0,
-                Name = "[Select a company...]"
+                TaxId = 0,
+                Description = "[Select a tax...]"
             });
 
-            return companies.OrderBy(d => d.Name).ToList();
+            return taxes.OrderBy(d => d.Description).ToList();
         }
 
-        public static List<Company> GetCategories(int companyId)
+        public static List<Category> GetCategories(int companyId)
         {
-            var companies = db.Companies.ToList();
-            companies.Add(new Company
+            var categories = db.Categories.ToList();
+            categories.Add(new Category
             {
-                CityId = 0,
-                Name = "[Select a company...]"
+                CategoryId = 0,
+                Description = "[Select a category...]"
             });
 
-            return companies.OrderBy(d => d.Name).ToList();
+            return categories.OrderBy(d => d.Description).ToList();
         }
 
         public void Dispose()
