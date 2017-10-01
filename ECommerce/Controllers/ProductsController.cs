@@ -77,12 +77,29 @@ namespace ECommerce.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,CompanyId,Description,BarCode,CategoryId,TaxId,Price,Image,Remarks")] Product product)
+        public ActionResult Create(Product product)
         {
             if (ModelState.IsValid)
             {
                 db.Products.Add(product);
                 db.SaveChanges();
+
+                if (product.ImageFile!=null)
+                {
+                    var folder = "~/Content/Products";
+                    var file = string.Format("{0}.jpg",product.ProductId);
+                    var response = FilesHelper.UploadPhoto(
+                        product.ImageFile, folder, file);
+
+                    if (response)
+                    {
+                        var pic = string.Format("{0}/{1}", folder, file);
+                        product.Image = pic;
+                        db.Entry(product).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+
                 return RedirectToAction("Index");
             }
 
