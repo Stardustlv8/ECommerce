@@ -10,7 +10,6 @@ using ECommerce.Models;
 
 namespace ECommerce.Controllers
 {
-    [Authorize(Roles ="User")]
     public class TaxesController : Controller
     {
         private ECommerceContext db = new ECommerceContext();
@@ -18,17 +17,7 @@ namespace ECommerce.Controllers
         // GET: Taxes
         public ActionResult Index()
         {
-            var user = db.Users
-                .Where(u => u.UserName ==User.Identity.Name)
-                .FirstOrDefault();
-
-            if (user ==null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            var taxes = db.Taxes
-                .Where(t => t.CompanyId == user.CompanyId);
-
+            var taxes = db.Taxes.Include(t => t.Company);
             return View(taxes.ToList());
         }
 
@@ -39,29 +28,19 @@ namespace ECommerce.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
             Tax tax = db.Taxes.Find(id);
-
             if (tax == null)
             {
                 return HttpNotFound();
             }
-
             return View(tax);
         }
 
         // GET: Taxes/Create
         public ActionResult Create()
         {
-            var user = db.Users
-                .Where(u => u.UserName == User.Identity.Name)
-                .FirstOrDefault();
-
-            var tax = new Tax {
-                CompanyId = user.CompanyId
-            };
-
-            return View(tax);
+            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name");
+            return View();
         }
 
         // POST: Taxes/Create
@@ -69,7 +48,7 @@ namespace ECommerce.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Tax tax)
+        public ActionResult Create([Bind(Include = "TaxId,Description,Rate,CompanyId")] Tax tax)
         {
             if (ModelState.IsValid)
             {
@@ -89,14 +68,12 @@ namespace ECommerce.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
             Tax tax = db.Taxes.Find(id);
-
             if (tax == null)
             {
                 return HttpNotFound();
             }
-
+            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", tax.CompanyId);
             return View(tax);
         }
 
@@ -105,7 +82,7 @@ namespace ECommerce.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Tax tax)
+        public ActionResult Edit([Bind(Include = "TaxId,Description,Rate,CompanyId")] Tax tax)
         {
             if (ModelState.IsValid)
             {
