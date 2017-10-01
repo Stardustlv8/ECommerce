@@ -10,6 +10,7 @@ using ECommerce.Models;
 
 namespace ECommerce.Controllers
 {
+    [Authorize(Roles ="User")]
     public class TaxesController : Controller
     {
         private ECommerceContext db = new ECommerceContext();
@@ -17,7 +18,9 @@ namespace ECommerce.Controllers
         // GET: Taxes
         public ActionResult Index()
         {
-            var taxes = db.Taxes.Include(t => t.Company);
+            var taxes = db.Taxes
+                .Include(t => t.Company);
+
             return View(taxes.ToList());
         }
 
@@ -39,8 +42,21 @@ namespace ECommerce.Controllers
         // GET: Taxes/Create
         public ActionResult Create()
         {
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name");
-            return View();
+            var user = db.Users
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefault();
+
+            if (user ==null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var tax = new Tax
+            {
+                CompanyId = user.CompanyId
+            };
+
+            return View(tax);
         }
 
         // POST: Taxes/Create
@@ -48,7 +64,7 @@ namespace ECommerce.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TaxId,Description,Rate,CompanyId")] Tax tax)
+        public ActionResult Create(Tax tax)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +73,6 @@ namespace ECommerce.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", tax.CompanyId);
             return View(tax);
         }
 
@@ -73,7 +88,7 @@ namespace ECommerce.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", tax.CompanyId);
+
             return View(tax);
         }
 
@@ -90,7 +105,7 @@ namespace ECommerce.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", tax.CompanyId);
+
             return View(tax);
         }
 

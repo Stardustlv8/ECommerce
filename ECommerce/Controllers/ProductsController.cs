@@ -17,7 +17,11 @@ namespace ECommerce.Controllers
         // GET: Products
         public ActionResult Index()
         {
-            var products = db.Products.Include(p => p.Category).Include(p => p.Company).Include(p => p.Tax);
+            var products = db.Products
+                .Include(p => p.Category)
+                .Include(p => p.Company)
+                .Include(p => p.Tax);
+
             return View(products.ToList());
         }
 
