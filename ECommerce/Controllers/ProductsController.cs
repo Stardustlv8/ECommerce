@@ -11,6 +11,7 @@ using ECommerce.Classes;
 
 namespace ECommerce.Controllers
 {
+    //[Authorize(Roles ="User")]
     public class ProductsController : Controller
     {
         private ECommerceContext db = new ECommerceContext();
@@ -197,7 +198,10 @@ namespace ECommerce.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        public ActionResult ProductsViews()
+        {
+            return View();
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

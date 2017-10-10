@@ -22,6 +22,7 @@ namespace ECommerce
                 new MigrateDatabaseToLatestVersion<ECommerceContext, Configuration>()
                 
                 );
+
             CheckRolesAndSuperUser();
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

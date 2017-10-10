@@ -50,7 +50,7 @@ namespace ECommerce.Classes
 
         public static List<Tax> GetTaxes(int companyId)
         {
-            var taxes = db.Taxes.ToList();
+            var taxes = db.Taxes.Where(t => t.CompanyId == companyId).ToList();
             taxes.Add(new Tax
             {
                 TaxId = 0,
@@ -62,7 +62,7 @@ namespace ECommerce.Classes
 
         public static List<Category> GetCategories(int companyId)
         {
-            var categories = db.Categories.ToList();
+            var categories = db.Categories.Where(c => c.CompanyId == companyId).ToList();
             categories.Add(new Category
             {
                 CategoryId = 0,

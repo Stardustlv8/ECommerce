@@ -11,7 +11,6 @@ namespace ECommerce.Migrations
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
-            ContextKey = "ECommerce.Models.ECommerceContext";
         }
 
         protected override void Seed(ECommerce.Models.ECommerceContext context)
